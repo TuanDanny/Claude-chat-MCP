@@ -26,6 +26,8 @@ Searches text files with bounded file size and redacted snippets.
 
 Reads one root-relative file through safe path, policy, extraction, chunking, and citation.
 
+Text/code files return text chunks. Office OpenXML files return basic extracted text. Archives return entry listings. Other binary formats return metadata with an explicit understanding status.
+
 ### `read_file_chunk`
 
 Reads a line-window chunk from a file.

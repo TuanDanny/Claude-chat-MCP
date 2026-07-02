@@ -46,6 +46,14 @@ audit.jsonl
 
 They record what Claude was allowed to see and what was blocked. They should not contain raw secrets.
 
+## Binary And Container Files
+
+V1 avoids dumping raw bytes into Claude.
+
+- `.docx`, `.pptx`, and `.xlsx` use a basic OpenXML text extractor.
+- `.zip`-like archives return bounded entry listings.
+- PDF, image, database, executable, and unknown binary files return metadata unless a deeper extractor is added.
+
 ## Remote Policy
 
 Remote relay access is stricter:

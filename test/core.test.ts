@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import AdmZip from "adm-zip";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { buildPacketFromFiles, inspectRegisteredRoot, readRegisteredFile, scanRegisteredRoot, searchContent, searchFiles } from "../src/core.js";
 import { addRoot, listRoots } from "../src/roots/registry.js";
@@ -79,5 +80,33 @@ describe("Claude Local MCP core", () => {
     expect(packet.files_read).toEqual(["safe.txt"]);
     expect(packet.files_skipped[0]).toMatchObject({ path: ".env", reason: "sensitive_confirmation_required" });
     expect(packet.content).toContain("Safe context.");
+  });
+
+  it("extracts basic Office OpenXML text and archive entry listings", () => {
+    const project = makeTempDir("claude-local-office-");
+    const docx = new AdmZip();
+    docx.addFile(
+      "word/document.xml",
+      Buffer.from(
+        '<?xml version="1.0" encoding="UTF-8"?><w:document xmlns:w="w"><w:body><w:p><w:r><w:t>Quarterly MCP plan</w:t></w:r></w:p></w:body></w:document>',
+        "utf8"
+      )
+    );
+    docx.writeZip(path.join(project, "plan.docx"));
+
+    const archive = new AdmZip();
+    archive.addFile("notes/readme.txt", Buffer.from("inside archive", "utf8"));
+    archive.writeZip(path.join(project, "bundle.zip"));
+
+    addRoot(project, "OfficeRoot");
+    const officeRead = readRegisteredFile("OfficeRoot", "plan.docx");
+    expect(officeRead.file_type).toBe("office");
+    expect(officeRead.understanding_status).toBe("complete");
+    expect(officeRead.chunks[0].text).toContain("Quarterly MCP plan");
+    expect(officeRead.metadata.parts).toContain("word/document.xml");
+
+    const archiveRead = readRegisteredFile("OfficeRoot", "bundle.zip");
+    expect(archiveRead.file_type).toBe("archive");
+    expect(archiveRead.chunks[0].text).toContain("notes/readme.txt");
   });
 });

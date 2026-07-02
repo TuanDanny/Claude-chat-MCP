@@ -18,7 +18,9 @@ MVP foundation:
 - Safe root-relative file reads with path traversal protection.
 - Sensitive-file confirmation policy.
 - Text/code chunking with citations.
-- Metadata-only fallback for PDF, Office, image, archive, database, binary, and unknown files.
+- Basic Office OpenXML text extraction for `.docx`, `.pptx`, `.xlsx`.
+- Archive entry listing for `.zip`-like files.
+- Metadata-only fallback for PDF, image, database, binary, and unknown files.
 - Relay pairing/policy skeleton for outbound remote access.
 - Write/edit/delete disabled in v1; proposal contract is reserved for a future Windows approval UI.
 
@@ -124,7 +126,9 @@ See [docs/REMOTE_RELAY.md](docs/REMOTE_RELAY.md).
 "Read every file" means Claude receives useful, bounded context, not unsafe raw bytes.
 
 - Text/code/config files are read, redacted, chunked, and cited.
-- PDF/Office/image/archive/database/binary files return metadata and a clear `understanding_status` unless a deeper extractor exists.
+- Office OpenXML files return extracted text where possible.
+- Archives return bounded entry listings.
+- PDF/image/database/binary files return metadata and a clear `understanding_status` unless a deeper extractor exists.
 - Sensitive files return metadata and `blocked_confirmation_required` until explicitly confirmed.
 - Large roots require inspect/scan/search-first workflows to avoid context loss.
 
