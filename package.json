@@ -1,0 +1,55 @@
+{
+  "name": "@tuandanny/claude-chat-mcp",
+  "version": "0.1.0",
+  "description": "Claude-focused local MCP server for safe file understanding, context ledgers, and relay-ready access.",
+  "type": "module",
+  "bin": {
+    "claude-local-mcp": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "docs",
+    "CLAUDE_LOCAL_MCP_PLAN.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "pretest": "npm run build",
+    "test": "vitest run",
+    "mcp:stdio": "node dist/cli.js mcp stdio",
+    "mcp:http": "node dist/cli.js mcp http",
+    "doctor": "node dist/cli.js doctor"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TuanDanny/Claude-chat-MCP.git"
+  },
+  "keywords": [
+    "claude",
+    "mcp",
+    "model-context-protocol",
+    "local-files",
+    "typescript"
+  ],
+  "author": "TuanDanny",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TuanDanny/Claude-chat-MCP/issues"
+  },
+  "homepage": "https://github.com/TuanDanny/Claude-chat-MCP#readme",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "commander": "^14.0.2",
+    "ws": "^8.21.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "@types/ws": "^8.18.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.14"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}

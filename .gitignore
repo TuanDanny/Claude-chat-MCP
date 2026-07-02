@@ -1,0 +1,9 @@
+node_modules/
+dist/
+coverage/
+.claude-local-mcp/
+.env
+.env.*
+*.log
+*.tsbuildinfo
+npm-debug.log*
